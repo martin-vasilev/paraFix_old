@@ -254,16 +254,19 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
   #  Read in da1 data into a dataframe: #
   #-------------------------------------#
 
-  cat("Processing data for subject...")
   fix<- NULL
 
   for(i in 1:length(daF)){
-    cat(paste(i, " ", sep=""))
+    cat("Processing data for subject... "); cat(paste(i, " ", sep="")); cat("\n")
 
     fileDA<- readLines(daF[i], warn=F) # load da1 file
-    dataF<- readLines(asc[i]) # load asc file
+    cat(sprintf("Loading data file: %s", asc[i]))
+    dataF<- readLines(asc[i]) # load asc file;
+    cat(". Done")
     trial_db<- trial_info(dataF, maxtrial, asc[i]) # get info about trials
     #text<- get_text(file[trial_db$ID[j]:trial_db$start[j]])
+
+    cat("\n"); cat("Mapping fixations for trial: ")
 
     for(j in 1:length(fileDA)){ # for each item
       string<- fileDA[j]
@@ -312,6 +315,8 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       fix_temp<- data.frame(sub, cond, item, seq, charX, char_trial, line, sent, word, fix_dur)
       fix<- rbind(fix, fix_temp)
       rm(sub, cond, item, seq, charX, char_trial, line, sent, word, fix_dur)
+
+      cat(paste(toString(j), " ", sep=''))
 
     } # end of j loop
 
