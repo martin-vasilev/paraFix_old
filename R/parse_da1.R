@@ -4,10 +4,11 @@
 parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/data_da1.txt",
                      list_asc= "C:/Users/Martin Vasilev/Documents/Cdiff_data/data_asc.txt",
                      ResX= 1024, ResY= 768, maxtrial=24){
+  message(paste("Assuming trial IDs end in", "'", 'D0', "'", sep=''))
+
   #-----------------------------------------------------------------------------------------#
   #                                  Load up Required functions:                            #
   #-----------------------------------------------------------------------------------------#
-
   get_text<- function(file){ ## extracts the loaded text material                         #
 
     start<- which(grepl("DISPLAY TEXT", file))+1 # start point
@@ -256,7 +257,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
     trial_db<- trial_info(dataF, maxtrial, asc[i]) # get info about trials
     #text<- get_text(file[trial_db$ID[j]:trial_db$start[j]])
 
-    for(j in 1:length(file)){ # for each item
+    for(j in 1:length(fileDA)){ # for each item
       string<- fileDA[j]
       da<-data.frame( do.call( rbind, strsplit( string, ' ' ) ) )
 
@@ -270,7 +271,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       whichDB<- which(trial_db$cond== cond & trial_db$item== item)
       # Extract EyeTrack trial text:
       text<- get_text(dataF[trial_db$ID[whichDB]:trial_db$start[whichDB]])
-      coords<- get_coord(text)
+      coords<- suppressWarnings(get_coord(text))
 
 
       da2<- da[,-c(1:8)]
