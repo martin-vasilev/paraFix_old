@@ -289,11 +289,17 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
 
       fix_dur<- NULL; charX<- NULL; line<- NULL
       sent<- NULL; word<- NULL; char_trial<- NULL
+      max_sent<- NULL; max_word<- NULL; intersent_regr<- NULL; intrasent_regr<- NULL
 
       count<- 0
 
+      # max word for each sentence:
+      curr_sent<- matrix(0, max(coords$sent),2)
+      curr_sent[,1]<- c(1:max(coords$sent))
+
       for(k in 1:nfix){ # for each fixation
 
+        # info from DA1 file:
         charX[k]<- as.numeric(as.character(da2[,count+1]))+1 # bc Eyetrack counts from 0
         line[k]<- as.numeric(as.character(da2[,count+2]))+1 # bc Eyetrack counts from 0
         fix_dur[k]<- as.numeric(as.character(da2[,count+4]))- as.numeric(as.character(da2[,count+3]))
@@ -305,6 +311,57 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
         char_trial[k]<- as.numeric(as.character(coords$char[rowN]))+1
 
         count<- count+4
+
+        #---------------
+        # saccade stuff:
+        #---------------
+
+        # max sentence:
+        if(k==1){
+          max_sent[k]<- sent[k]
+        } else{
+          max_sent[k]<- max_sent[k-1]
+
+          if(sent[k]> max_sent[k]){
+            max_sent[k]<- sent[k]
+          }
+        } # end of max sentence
+
+        # maximum word:
+        if(k==1){
+          max_word[k]<- abs(word[k])
+          curr_sent[sent[k],2]<- abs(word[k])
+        } else{
+          max_word[k]<- curr_sent[sent[k],2]
+          if(abs(word[k])>curr_sent[sent[k],2]){
+            max_word[k]<- abs(word[k])
+            curr_sent[sent[k],2]<- abs(word[k]) # replace new max word
+          }
+        } # end of max word
+
+
+        # Regression stuff:
+        if(sent[k]< max_sent[k]){
+          intersent_regr[k]<- 1
+        } else{
+          intersent_regr[k]<- 0
+        }
+
+        # intra-sentence regressions:
+        if(abs(word[k])<max_word[k]){
+          intrasent_regr[k]<- 1
+        }else{
+          intrasent_regr[k]<- 0
+        }
+        if(k>1){
+          if(word[k]==max_word[k] & max_word[k]==max_word[k-1] & intrasent_regr[k-1]==1){
+            intrasent_regr[k]<- 1 # returning to origin of regression (still 2nd-pass)
+          }
+        }
+
+
+
+
       } # end of k loop
 
       item<- rep(item, nfix)
@@ -312,9 +369,11 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       sub<- rep(sub, nfix)
       seq<- rep(seq, nfix)
 
-      fix_temp<- data.frame(sub, cond, item, seq, charX, char_trial, line, sent, word, fix_dur)
+      fix_temp<- data.frame(sub, cond, item, seq, charX, char_trial, line, sent, max_sent,
+                            word, max_word, fix_dur, intersent_regr, intrasent_regr)
       fix<- rbind(fix, fix_temp)
-      rm(sub, cond, item, seq, charX, char_trial, line, sent, word, fix_dur)
+      rm(sub, cond, item, seq, charX, char_trial, line, sent, max_sent, word, max_word, fix_dur,
+         intersent_regr, intrasent_regr)
 
       cat(paste(toString(j), " ", sep=''))
 
