@@ -129,6 +129,8 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       out$word<- NULL
       curr_sent=1
       curr_word=1
+      sent_line<- which(out$space==2); sent_line<- sent_line+1
+
       for(i in 1:nrow(out)){
 
         newSent<- curr_sent!= out$sent[i]
@@ -140,6 +142,12 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
 
         out$word[i]<- curr_word
         if(out$X6[i]== ""& !newSent){
+          curr_word<- curr_word+1
+          out$word[i]<- curr_word
+        }
+
+
+        if(is.element(i, sent_line)){
           curr_word<- curr_word+1
           out$word[i]<- curr_word
         }
@@ -277,7 +285,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       da2<- da[,-c(1:8)]
 
       fix_dur<- NULL; charX<- NULL; line<- NULL
-      sent<- NULL; word<- NULL; char_sent<- NULL
+      sent<- NULL; word<- NULL; char_trial<- NULL
 
       count<- 0
 
@@ -291,7 +299,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
         rowN<- which(coords$line_char== charX[k] & coords$line== line[k])
         sent[k]<- coords$sent[rowN]
         word[k]<- coords$word[rowN]
-        char_sent[k]<- as.numeric(as.character(coords$char[rowN]))+1
+        char_trial[k]<- as.numeric(as.character(coords$char[rowN]))+1
 
         count<- count+4
       } # end of k loop
@@ -301,9 +309,9 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       sub<- rep(sub, nfix)
       seq<- rep(seq, nfix)
 
-      fix_temp<- data.frame(sub, cond, item, seq, charX, char_sent, line, sent, word, fix_dur)
+      fix_temp<- data.frame(sub, cond, item, seq, charX, char_trial, line, sent, word, fix_dur)
       fix<- rbind(fix, fix_temp)
-      rm(sub, cond, item, seq, charX, char_sent, line, sent, word, fix_dur)
+      rm(sub, cond, item, seq, charX, char_trial, line, sent, word, fix_dur)
 
     } # end of j loop
 
