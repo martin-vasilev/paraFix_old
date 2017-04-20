@@ -257,7 +257,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
   fix<- NULL
 
   for(i in 1:length(daF)){
-    cat("Processing data for subject... "); cat(paste(i, " ", sep="")); cat("\n")
+    cat("\n") ;cat("Processing data for subject... "); cat(paste(i, " ", sep="")); cat("\n")
 
     fileDA<- readLines(daF[i], warn=F) # load da1 file
     cat(sprintf("Loading data file: %s", asc[i]))
