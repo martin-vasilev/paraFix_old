@@ -306,6 +306,12 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
 
         ## Eyetrack details:
         rowN<- which(coords$line_char== charX[k] & coords$line== line[k])
+        if(length(rowN)==0){
+          next; # skip iteration
+          # issue a warning:
+          message(sprintf("Subject %i, item %i, fixation %i is outside of text", i, j, k))
+        }
+
         sent[k]<- coords$sent[rowN]
         word[k]<- coords$word[rowN]
         char_trial[k]<- as.numeric(as.character(coords$char[rowN]))+1
