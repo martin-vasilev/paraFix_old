@@ -306,7 +306,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
 
         ## Eyetrack details:
         rowN<- which(coords$line_char== charX[k] & coords$line== line[k])
-        if(length(rowN)==0){
+        if(length(rowN)==0 & k!=nfix){
           next; # skip iteration
           # issue a warning:
           message(sprintf("Subject %i, item %i, fixation %i is outside of text", i, j, k))
@@ -374,6 +374,12 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       cond<- rep(cond, nfix)
       sub<- rep(sub, nfix)
       seq<- rep(seq, nfix)
+      
+      if(length(rowN)==0 & k==nfix){
+          sub[k]<- NA; cond[k]<- NA; item[k]<- NA; seq[k]<- NA; charX[k]<- NA; char_trial[k]<- NA;
+          line[k]<- NA; sent[k]<- NA; max_sent[k]<- NA; word[k]<- NA; max_word[k]<- NA;
+          fix_dur[k]<- NA; intersent_regr[k]<-NA; intrasent_regr[k]<- NA
+      }
 
       fix_temp<- data.frame(sub, cond, item, seq, charX, char_trial, line, sent, max_sent,
                             word, max_word, fix_dur, intersent_regr, intrasent_regr)
