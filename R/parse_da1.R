@@ -311,13 +311,13 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
           # issue a warning:
           message(sprintf("Subject %i, item %i, fixation %i is outside of text", i, j, k))
         }
-        if(length(rowN)==0 & k==nfix){
-          sub[k]<- NA; cond[k]<- NA; item[k]<- NA; seq[k]<- NA; charX[k]<- NA; char_trial[k]<- NA;
-          line[k]<- NA; sent[k]<- NA; max_sent[k]<- NA; word[k]<- NA; max_word[k]<- NA;
-          fix_dur[k]<- NA; intersent_regr[k]<-NA; intrasent_regr[k]<- NA
-          next; # skip iteration
-          message(sprintf("Subject %i, item %i, fixation %i is outside of text", i, j, k))
-        }
+      #  if(length(rowN)==0 & k==nfix){
+      #    sub[k]<- NA; cond[k]<- NA; item[k]<- NA; seq[k]<- NA; charX[k]<- NA; char_trial[k]<- NA;
+      #    line[k]<- NA; sent[k]<- NA; max_sent[k]<- NA; word[k]<- NA; max_word[k]<- NA;
+      #    fix_dur[k]<- NA; intersent_regr[k]<-NA; intrasent_regr[k]<- NA
+      #    next; # skip iteration
+      #    message(sprintf("Subject %i, item %i, fixation %i is outside of text", i, j, k))
+      # }
 
         sent[k]<- coords$sent[rowN]
         word[k]<- coords$word[rowN]
