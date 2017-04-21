@@ -404,7 +404,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
 
   } # end of i loop
 
-
+  cat("All done!")
 
   return(fix)
 
