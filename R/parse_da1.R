@@ -287,7 +287,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
 
       da2<- da[,-c(1:8)]
 
-      fix_dur<- NULL; charX<- NULL; line<- NULL
+      fix_dur<- NULL; charX<- NULL; line<- NULL; sacc_len<- NULL
       sent<- NULL; word<- NULL; char_trial<- NULL
       max_sent<- NULL; max_word<- NULL; intersent_regr<- NULL; intrasent_regr<- NULL
 
@@ -371,6 +371,15 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
             intrasent_regr[k]<- 1 # returning to origin of regression (still 2nd-pass)
           }
         }
+        
+        # saccade length:
+        if(k>1){ # no saccade on first fixation
+          if(line[k]== line[k-1]){ # not meaningful to calculate length when crossing lines
+             sacc_len[k]<- abs(charX[k]- charX[k-1])
+          } else{
+              sacc_len[k]<- NA
+          }
+        }
 
 
       } # end of k loop
@@ -382,10 +391,10 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       
 
       fix_temp<- data.frame(sub, cond, item, seq, charX, char_trial, line, sent, max_sent,
-                            word, max_word, fix_dur, intersent_regr, intrasent_regr)
+                            word, max_word, fix_dur, intersent_regr, intrasent_regr, sacc_len)
       fix<- rbind(fix, fix_temp)
       rm(sub, cond, item, seq, charX, char_trial, line, sent, max_sent, word, max_word, fix_dur,
-         intersent_regr, intrasent_regr)
+         intersent_regr, intrasent_regr, sacc_len)
 
       cat(paste(toString(j), " ", sep=''))
 
