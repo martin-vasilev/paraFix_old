@@ -135,11 +135,6 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
 
         newSent<- curr_sent!= out$sent[i]
 
-        if(newSent){
-          curr_sent<- curr_sent+1
-          curr_word<- 1
-        }
-
         out$word[i]<- curr_word
         if(out$X6[i]== ""& !newSent){
           curr_word<- curr_word+1
@@ -152,10 +147,9 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
           out$word[i]<- curr_word
         }
         
-        if(i>1){
-          if(& out$X6[i-1]=="."){
-          curr_word<-1
-          }
+        if(newSent){
+          curr_sent<- curr_sent+1
+          curr_word<- 1
         }
 
       }
