@@ -369,7 +369,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
         }
 
         # intra-sentence regressions:
-        if(sent[k]== max_sent[k]){
+        #if(sent[k]== max_sent[k]){
            if(abs(word[k])<max_word[k]){
               intrasent_regr[k]<- 1
            }else{
@@ -380,6 +380,9 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
                 intrasent_regr[k]<- 1 # returning to origin of regression (still 2nd-pass)
              }
            }
+        #}
+        if(intersent_regr[k]==1){
+          intrasent_regr[k]<- 0
         }
         
         # saccade length:
