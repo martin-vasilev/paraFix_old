@@ -3,7 +3,7 @@
 
 parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/data_da1.txt",
                      list_asc= "C:/Users/Martin Vasilev/Documents/Cdiff_data/data_asc.txt",
-                     ResX= 1024, ResY= 768, maxtrial=24){
+                     ResX= 1024, ResY= 768, maxtrial=24, bodge=FALSE){
   message(paste("Assuming trial IDs end in", "'", 'D0', "'", sep=''))
 
   #-----------------------------------------------------------------------------------------#
@@ -287,7 +287,11 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       # Extract EyeTrack trial text:
       text<- get_text(dataF[trial_db$ID[whichDB]:trial_db$start[whichDB]])
       coords<- suppressWarnings(get_coord(text))
-
+      
+      if(bodge==TRUE & item==19){ # fixes an issue unique to my experiment
+        coords$word[which(coords$char==318)]=11
+        coords$word[which(coords$char==319):which(coords$char==372)]= coords$word[which(coords$char==319):which(coords$char==372)]-1
+      }
 
       da2<- da[,-c(1:8)]
 
