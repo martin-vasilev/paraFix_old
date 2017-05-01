@@ -153,6 +153,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
         if(newSent){
           curr_sent<- curr_sent+1
           curr_word<- 1
+          out$word[i]<- curr_word
         }
 
       }
