@@ -152,8 +152,10 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
           out$word[i]<- curr_word
         }
         
-        if(i>1 & out$X6[i-1]=="."){
+        if(i>1){
+          if(& out$X6[i-1]=="."){
           curr_word<-1
+          }
         }
 
       }
