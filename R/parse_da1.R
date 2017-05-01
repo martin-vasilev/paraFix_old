@@ -125,7 +125,8 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
 
     # map words:
     map_words<- function(out){
-
+      
+      out$X6<- as.character(out$X6)
       out$word<- NULL
       curr_sent=1
       curr_word=1
@@ -143,7 +144,9 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
 
 
         if(is.element(i, sent_line)){
-          curr_word<- curr_word+1
+          if(out$X6[i]!="."){
+            curr_word<- curr_word+1
+          }
           out$word[i]<- curr_word
         }
         
