@@ -142,7 +142,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
         }
 
 
-        if(is.element(i, sent_line) & out$line_char[k+1]!=1){
+        if(is.element(i, sent_line)){
           curr_word<- curr_word+1
           out$word[i]<- curr_word
         }
