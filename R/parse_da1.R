@@ -288,9 +288,16 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       text<- get_text(dataF[trial_db$ID[whichDB]:trial_db$start[whichDB]])
       coords<- suppressWarnings(get_coord(text))
       
-      if(bodge==TRUE & item==19){ # fixes an issue unique to my experiment
-        coords$word[which(coords$char==318)]=11
-        coords$word[which(coords$char==319):which(coords$char==372)]= coords$word[which(coords$char==319):which(coords$char==372)]-1
+      if(bodge==TRUE){ # fixes an issue unique to my experiment
+        if(item==19){
+           coords$word[which(coords$char==318)]=11
+           coords$word[which(coords$char==319):which(coords$char==372)]= coords$word[which(coords$char==319):which(coords$char==372)]-1
+        }
+        if(item==14){
+           coords$word[which(coords$char==261)]=23
+           coords$word[which(coords$char==262)]=23
+           coords$word[which(coords$char==263):which(coords$char==279)]= coords$word[which(coords$char==263):which(coords$char==279)]-1
+        }
       }
 
       da2<- da[,-c(1:8)]
