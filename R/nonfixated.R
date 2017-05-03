@@ -26,15 +26,15 @@ nonfixated<- function(data, list_asc= "data/raw/files.txt",
   }
   
   
-  get_coord<- function(string){ # extracts text coordinates from trial info
-    
+    get_coord<- function(string){ # extracts text coordinates from trial info
+
     # check to make sure there are no button press flags here..
     a= which(gregexpr(pattern ='BUTTON', string)==1)
-    
+
     if(length(a)>0){
       string<- string[-a]
     }
-    
+
     #if(which(grepl('   ', string))==1){
     #  loc<- as.numeric(gregexpr("CHAR", string))
     #  part1<- substr(string, 1, loc+7)
@@ -47,15 +47,15 @@ nonfixated<- function(data, list_asc= "data/raw/files.txt",
     out<- out[,2]
     out <-  data.frame(do.call( rbind, strsplit( out, ' ' ) ) )
     #}
-    
+
     out<- subset(out, X2!="DELAY") # Remove DELAY 1ms lines
-    
+
     out$X7<- as.numeric(as.character(out$X7))
     out$X8<- as.numeric(as.character(out$X8))
     out$X9<- as.numeric(as.character(out$X9))
     out$X10<- as.numeric(as.character(out$X10))
     out$X11<- as.numeric(as.character(out$X11))
-    
+
     fix_spaces<- function(out){
       out$space<- NULL
       a<- which(out$X6=="") # find position of empty spaces
@@ -68,14 +68,14 @@ nonfixated<- function(data, list_asc= "data/raw/files.txt",
       out$X10[a]<- out$X11[a]
       out<- out[,-11]
     }
-    
+
     out<- fix_spaces(out)
-    
-    
+
+
     # clean_MSG<- function(msg){as.numeric(unlist(gsub("[^0-9]", "", unlist(msg)), ""))}
     # out$X1<- clean_MSG(out$X1) # get rid of MSG text
     out<- out[,-c(1,2,3,5)] # remove useless columns
-    
+
     # map sentences:
     map_sent<- function(out){
       sent_bnd<-  which(out$X6=="."| out$X6=="?");
@@ -95,69 +95,73 @@ nonfixated<- function(data, list_asc= "data/raw/files.txt",
       out$sent<- sent
       return(out)
     }
-    
+
     out<- map_sent(out)
-    
+
     # map lines:
     map_line<- function(out){
       line<- NULL
       lines<- sort(unique(out$X8));
       # as.numeric.factor <- function(x) {as.numeric(levels(x))[x]}
       #lines<- as.numeric.factor(lines)
-      
+
       for(i in 1:length(lines)){
         loc_lines<- which(out$X8==lines[i])
         line<- c(line, rep(i, length(loc_lines)))
         out$space[length(line)]<- 2
       }
       out$line<- line
-      
+
       return(out)
     }
-    
+
     out<- map_line(out)
-    
-    
+
+
     # map words:
     map_words<- function(out){
       
+      out$X6<- as.character(out$X6)
       out$word<- NULL
       curr_sent=1
       curr_word=1
       sent_line<- which(out$space==2); sent_line<- sent_line+1
-      
+
       for(i in 1:nrow(out)){
-        
+
         newSent<- curr_sent!= out$sent[i]
-        
-        if(newSent){
-          curr_sent<- curr_sent+1
-          curr_word<- 1
-        }
-        
+
         out$word[i]<- curr_word
         if(out$X6[i]== ""& !newSent){
           curr_word<- curr_word+1
           out$word[i]<- curr_word
         }
-        
-        
+
+
         if(is.element(i, sent_line)){
-          curr_word<- curr_word+1
+          if(out$X6[i]!="."){
+            curr_word<- curr_word+1
+          }
           out$word[i]<- curr_word
         }
         
+        if(newSent){
+          curr_sent<- curr_sent+1
+          curr_word<- 1
+          out$word[i]<- curr_word
+        }
+
       }
-      
+
       return(out)
     }
-    
+
     out<- map_words(out)
-    
+
     # change column names:
     colnames(out)<- c("char", "letter", "x1", "y1", "x2", "y2", "space", "sent",
                       "line", "word")
-    
+
     # map characters per line (for Eye Doctor):
     out$line_char<- NA
     unq_line<- unique(out$line)
@@ -165,7 +169,7 @@ nonfixated<- function(data, list_asc= "data/raw/files.txt",
       line<- which(out$line==unq_line[i])
       out$line_char[line[1]:line[length(line)]]<- 1:length(line)
     }
-    
+
     return(out)
   }
   
