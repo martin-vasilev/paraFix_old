@@ -2,7 +2,7 @@
 # Martin R Vasilev, 2017
 
 nonfixated<- function(data, list_asc= "data/raw/files.txt",
-                      maxtrial=24){
+                      maxtrial=24, bodge=FALSE){
   
   get_text<- function(file){ ## extracts the loaded text material                         #
     
@@ -259,6 +259,20 @@ nonfixated<- function(data, list_asc= "data/raw/files.txt",
       whichDB<- which(trial_db$item== nitems[j])
       text<- get_text(dataF[trial_db$ID[whichDB]:trial_db$start[whichDB]])
       coords<- suppressWarnings(get_coord(text))
+      
+      if(bodge==TRUE){ # fixes an issue unique to my experiment
+        if(nitems[j]==19){
+           coords$word[which(coords$char==318)]=11
+           coords$word[which(coords$char==319):which(coords$char==372)]= coords$word[which(coords$char==319):which(coords$char==372)]-1
+        }
+        if(nitems[j]==14){
+           coords$word[which(coords$char==261)]=23
+           coords$word[which(coords$char==262)]=23
+           coords$word[which(coords$char==263):which(coords$char==279)]= coords$word[which(coords$char==263):which(coords$char==279)]-1
+        }
+      }
+      
+      
       curr_sent<- matrix(0, max(coords$sent),3)
       curr_sent[,1]<- c(1:max(coords$sent))
       curr_sent[,2]<- 1 # bc sent starts from first word
@@ -281,7 +295,7 @@ nonfixated<- function(data, list_asc= "data/raw/files.txt",
           for(l in 1:length(not)){
             t<- add
             t$sub<- i
-            t$item<- j
+            t$item<- nitems[j]
             t$cond<- n$cond[1]
             t$seq<- n$seq[1]
             t$sent<- k
