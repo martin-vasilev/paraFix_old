@@ -303,7 +303,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       da2<- da[,-c(1:8)]
 
       fix_dur<- NULL; charX<- NULL; line<- NULL; sacc_len<- NULL
-      sent<- NULL; word<- NULL; char_trial<- NULL
+      sent<- NULL; word<- NULL; char_trial<- NULL; land<- NULL
       max_sent<- NULL; max_word<- NULL; intersent_regr<- NULL; intrasent_regr<- NULL
 
       count<- 0
@@ -337,7 +337,13 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
         sent[k]<- coords$sent[rowN]
         word[k]<- coords$word[rowN]
         char_trial[k]<- as.numeric(as.character(coords$char[rowN]))+1
-
+        
+        ###
+        nc<- coords$char[which(coords$sent== sent[k] & coords$word== word[k]]
+        nc<- nc[1]+1
+        land[k]<- char_trial[k]- nc           
+                   
+                   
         count<- count+4
 
         #---------------
@@ -410,10 +416,10 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
       seq<- rep(seq, nfix)
       
 
-      fix_temp<- data.frame(sub, cond, item, seq, charX, char_trial, line, sent, max_sent,
+      fix_temp<- data.frame(sub, cond, item, seq, charX, char_trial, land, line, sent, max_sent,
                             word, max_word, fix_dur, intersent_regr, intrasent_regr, sacc_len)
       fix<- rbind(fix, fix_temp)
-      rm(sub, cond, item, seq, charX, char_trial, line, sent, max_sent, word, max_word, fix_dur,
+      rm(sub, cond, item, seq, charX, char_trial, land, line, sent, max_sent, word, max_word, fix_dur,
          intersent_regr, intrasent_regr, sacc_len)
 
       cat(paste(toString(j), " ", sep=''))
