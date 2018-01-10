@@ -339,7 +339,7 @@ parse_da1<- function(list_da1= "C:/Users/Martin Vasilev/Documents/Cdiff_data/dat
         char_trial[k]<- as.numeric(as.character(coords$char[rowN]))+1
         
         ###
-        nc<- coords$char[which(coords$sent== sent[k] & coords$word== word[k]]
+        nc<- coords$char[which(coords$sent== sent[k] & coords$word== word[k])]
         nc<- nc[1]+1
         land[k]<- char_trial[k]- nc           
                    
