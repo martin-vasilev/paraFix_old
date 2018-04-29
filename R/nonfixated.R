@@ -17,7 +17,7 @@ nonfixated<- function(data, list_asc= "data/raw/files.txt",
       # text<- text[-a] # because one line is removed
     }
     
-    input<- which(grepl("INPUT", text)); input<- input[1]-1 # end point
+    input<- which(grepl("DELAY", text)); input<- input[length(input)] # end point
     text<- text[1:input]
     
     #end<- which(grepl("INPUT", file)); end<- end[1]-1 # end point
